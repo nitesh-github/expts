@@ -20,7 +20,7 @@ app.use(express.json());
 app.use('/', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, MERN with TypeScript! 3');
+  res.send('Hello, MERN with TypeScript! 4');
 });
 
 // Connect to MongoDB using Mongoose
