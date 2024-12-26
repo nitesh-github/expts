@@ -1,0 +1,11 @@
+import { Router } from 'express';
+//import { basicAuthMiddleware } from '../middlewares/basicAuthMiddleware';
+import { limiter } from '../middlewares/rateLimitMiddleware';
+import { register, login } from '../controllers/userControllers';
+import multer from 'multer';
+const upload = multer();
+const basicAuthRoutes = Router();
+basicAuthRoutes.use(limiter);
+basicAuthRoutes.post("/register", register);
+basicAuthRoutes.post("/login",upload.none(), login);
+export default basicAuthRoutes;
