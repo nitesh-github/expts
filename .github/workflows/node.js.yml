@@ -28,5 +28,4 @@ jobs:
     - run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}"
-    - name: Compile TypeScript
     - run: npx tsc
