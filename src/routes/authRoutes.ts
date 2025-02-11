@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { authMiddleware } from '../middlewares/authMiddleware';
-import { getUser } from '../controllers/userControllers';
+import { register, login, getUser, getUserList} from '../controllers/userControllers';
 const authRoutes = Router();
+authRoutes.post("/register", register);
+authRoutes.post("/login", login);
 authRoutes.use(authMiddleware);
 authRoutes.post("/get-user", getUser);
+authRoutes.get("/get-user-list", getUserList);
 export default authRoutes;

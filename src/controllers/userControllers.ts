@@ -58,3 +58,12 @@ export const getUser = async (req: Request, res: Response):Promise<any> => {
     return res.status(500).json({ status: false, message: 'Error fetching user profile' });
   }
 };
+
+export const getUserList = async (req:Request, res:Response):Promise<any> => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({ status: true, data: users });
+  } catch (error) {
+    return res.status(500).json({ status: false, message: 'Error fetching user profile' });
+  }
+};
