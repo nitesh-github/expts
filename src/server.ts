@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 4000;
 const DB_URL = process.env.DBURL;
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Allow requests from React app on localhost:3000
+  origin: 'http://3.110.27.149', // Allow requests from React app on localhost:3000
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 };
