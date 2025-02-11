@@ -3,6 +3,6 @@ import authRoutes from './authRoutes';
 //import basicAuthRoutes from './basicAuthRoutes';
 const router = Router();
 router.use("/api", authRoutes);
-//commented 
+//commented
 //router.use("/api", basicAuthRoutes);
 export default router;
