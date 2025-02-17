@@ -10,9 +10,9 @@ const PORT = process.env.PORT || 4000;
 const DB_URL = process.env.DBURL;
 
 const corsOptions = {
-  origin: (origin, callback) => {
+  origin: (origin:string | undefined, callback:(err: Error | null, allow?: boolean)=>void) => {
       const allowedOrigins = ['http://3.110.27.149','http://3.110.27.149:4000', 'http://3.110.27.149:3000'];
-      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
       } else {
           callback(new Error('Not allowed by CORS'));
