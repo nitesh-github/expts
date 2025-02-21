@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { Worker, isMainThread, parentPort, workerData } from 'worker_threads';
+import path from 'path';
 
 export const register = async (req: Request, res: Response):Promise<any> => {
   const { name, email, password } = req.body;
@@ -38,7 +40,7 @@ export const login = async (req: Request, res: Response):Promise<any> => {
     }    
 
     const token = jwt.sign({ userId: user?._id }, process.env.JWT_SECRET as string, {
-      expiresIn: '1h',
+      expiresIn: '24h',
     });
     let userinfo = {
       _id:user?._id,
@@ -59,11 +61,64 @@ export const getUser = async (req: Request, res: Response):Promise<any> => {
   }
 };
 
-export const getUserList = async (req:Request, res:Response):Promise<any> => {
+export const getUserList = async (req:Request, res:Response):Promise<void> => {
   try {
     const users = await User.find();
-    return res.status(200).json({ status: true, data: users });
+    res.status(200).json({ status: true, data: users });
   } catch (error) {
-    return res.status(500).json({ status: false, message: 'Error fetching user profile' });
+    res.status(500).json({ status: false, message: 'Error fetching user profile' });
   }
 };
+
+export const uploadUserCSV = async (req:Request, res:Response) : Promise<void>=>{
+  try {
+    
+    if (!req.file) {
+      res.status(400).send("No file uploaded.");
+      return;
+    }
+   
+    const imageName = req.file.filename;
+    const filePath = req.file.path;
+    // Start a worker thread to process the CSV file
+    const worker = new Worker(path.join(__dirname, 'worker.ts'), {
+      workerData: { filePath, imageName } 
+    });
+
+    // Listen for messages from the worker thread
+    worker.on('message', (result) => {
+      if (result.status === 'success') {
+        // Handle the successful file processing
+        console.log(result.testmsg)
+        return res.status(200).json({
+          message: "CSV file uploaded and processed successfully!",
+          data: result.data,
+          test:result.testmsg
+        });
+      } else {
+        return res.status(500).json({
+          status: false,
+          message: "Error processing file in worker thread.",
+        });
+      }
+    });
+
+    worker.on('error', (err) => {
+      console.error('Worker thread error:', err);
+      return res.status(500).json({
+        status: false,
+        message: "Error in worker thread.",
+      });
+    });
+
+    worker.on('exit', (code) => {
+      if (code !== 0) {
+        console.error(`Worker thread exited with code ${code}`);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: false, message: 'Error in uploading csv data.' });
+  }
+  
+}

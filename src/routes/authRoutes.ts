@@ -1,10 +1,12 @@
 import { Router } from 'express';
 import { authMiddleware } from '../middlewares/authMiddleware';
-import { register, login, getUser, getUserList} from '../controllers/userControllers';
+import { register, login, getUser, getUserList, uploadUserCSV} from '../controllers/userControllers';
+import multerUpload from '../middlewares/multerUpload';
 const authRoutes = Router();
 authRoutes.post("/register", register);
 authRoutes.post("/login", login);
 authRoutes.use(authMiddleware);
 authRoutes.post("/get-user", getUser);
 authRoutes.get("/get-user-list", getUserList);
+authRoutes.post("/upload-user-csv", multerUpload.single('user_csv'),uploadUserCSV);
 export default authRoutes;

@@ -11,7 +11,7 @@ const DB_URL = process.env.DBURL;
 
 const corsOptions = {
   origin: (origin:string | undefined, callback:(err: Error | null, allow?: boolean)=>void) => {
-      const allowedOrigins = ['http://3.110.27.149','http://3.110.27.149:4000', 'http://3.110.27.149:3000'];
+      const allowedOrigins = ['http://3.110.27.149','http://3.110.27.149:4000', 'http://3.110.27.149:3000', 'http://localhost:3000'];
       if (!origin || allowedOrigins.includes(origin)) {
           callback(null, true);
       } else {
@@ -27,7 +27,7 @@ app.use(express.json());
 app.use('/', router);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send(`Hello, MERN with TypeScript! 11. Server is running on port ${PORT}`);
+  res.send(`Hello, MERN with TypeScript! 9. Server is running on port ${PORT}`);
 });
 
 // Connect to MongoDB using Mongoose

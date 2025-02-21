@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only --watch src/controllers/worker.ts src/server.ts",
     "start": "ts-node-dev --respawn --transpile-only src/server.ts"
   },
   "keywords": [],
@@ -16,12 +16,14 @@
     "basic-auth": "^2.0.1",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "csv-parser": "^3.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.3",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/basic-auth": "^1.1.8",
