@@ -24,6 +24,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use('/', router);
 
 app.get('/', (req: Request, res: Response) => {
@@ -35,6 +36,11 @@ mongoose.connect(DB_URL)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Failed to connect to MongoDB', err));
 
+
+app.use((err: any, req: Request, res: Response, next: Function) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+  });
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

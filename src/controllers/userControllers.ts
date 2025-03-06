@@ -30,7 +30,6 @@ export const register = async (req: Request, res: Response):Promise<any> => {
 export const login = async (req: Request, res: Response):Promise<any> => {
   const { email, password } = req.body;
   try {
-    console.log(email);
     const user = await User.findOne({ email });
     if (!user) return res.status(400).json({ status: false,message: 'Invalid credentials' });
 
@@ -63,9 +62,14 @@ export const getUser = async (req: Request, res: Response):Promise<any> => {
 
 export const getUserList = async (req:Request, res:Response):Promise<void> => {
   try {
-    const users = await User.find();
-    res.status(200).json({ status: true, data: users });
+    const page = Number(req.body?.page || req.query?.page) + 1;
+    const limit = Number(req.body?.limit || req.query?.limit) || 10;
+    const skip = (page - 1) * limit;
+    const users = await User.find().skip(skip).limit(limit).lean();
+    const totalCount  = await User.countDocuments();
+    res.status(200).json({ status: true, data: {users,totalCount}});
   } catch (error) {
+    console.log(error);
     res.status(500).json({ status: false, message: 'Error fetching user profile' });
   }
 };
